@@ -72,16 +72,12 @@ public class ItemController {
      * 상품 수정
      * */
     @PostMapping(value = "/items/{itemId}/edit")
-    public String updateItem(@ModelAttribute("form") BookForm form) {
-        Book book = new Book();
-        book.setId(form.getId());
-        book.setName(form.getName());
-        book.setPrice(form.getPrice());
-        book.setStockQuantity(form.getStockQuantity());
-        book.setAuthor(form.getAuthor());
-        book.setIsbn(form.getIsbn());
-
-        itemService.saveItem(book);
+    public String updateItem(@PathVariable Long itemId, @ModelAttribute("form") BookForm form) {
+      
+        // 기존 컨트롤러 내에서 Book 엔티티를 생성했던 부분을 제거
+        // @Transactional 이 있는 서비스 계층에 변경할 데이터를 명확히 전달
+        // 트랜잭션 커밋 시점에 변경 감지가 실행되도록 처리
+        itemService.updateItem(itemId, form.getName(), form.getPrice(), form.getStockQuantity());
         return "redirect:/items";
     }
 }
